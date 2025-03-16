@@ -9,17 +9,14 @@
 class Solution {
 public:
     bool hasCycle(ListNode *head) {
-        vector<ListNode*> store;
-
-        while(head != NULL){
-            for(int i = 0; i < store.size(); i++){
-                if(store[i] == head){
-                    return 1;
-                }
+        map<ListNode*,bool> store;
+        while(head != NULL ){
+            if(store.find(head) != store.end()){
+                return true;
             }
-            store.push_back(head);
+            store[head] = true;
             head = head -> next;
         }
-        return 0;
+        return false;
     }
 };
