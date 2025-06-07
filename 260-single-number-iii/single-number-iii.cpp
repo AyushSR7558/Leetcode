@@ -1,16 +1,32 @@
 class Solution {
 public:
     vector<int> singleNumber(vector<int>& nums) {
-        int n = nums.size();
-        vector<int> ans;
-        sort(nums.begin(), nums.end());
-        for (int i = 1; i < n; i += 2) {
-            if (nums[i] != nums[i - 1]) {
-                ans.push_back(nums[i - 1]);
-                i-=1;
+        int ab = nums[0], n=nums.size();
+        for(int i=1;i<n;i++){
+            ab  =ab^ nums[i];
+        }
+        int idx =0 ;
+        for(int i=0;i<31;i++){
+            if(ab& (1<<i)){
+                break;
+            }
+            idx++;
+        }
+        cout<<idx;
+        int a =0;
+        int b =0;
+        for(int i=0;i<n;i++){
+            if(nums[i] & (1<<idx)){
+                a^=nums[i];
+            }
+            else{
+                cout<<nums[i]<<" ";
+                b^=nums[i];
             }
         }
-        if(ans.size()!=2) ans.push_back(nums[n-1]);
+        vector<int> ans;
+        ans.push_back(a);
+        ans.push_back(b);
         return ans;
     }
 };
