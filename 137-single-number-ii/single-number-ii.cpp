@@ -1,16 +1,14 @@
 class Solution {
 public:
     int singleNumber(vector<int>& nums) {
-        unordered_map<int,int> mp;
-        for(int num:nums){
-            mp[num]++;
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        for (int i = 1; i < n; i += 3) {
+            if (nums[i] != nums[i - 1]) {
+                cout<<nums[i]<<" "<<nums[i-1];
+                return nums[i - 1];
+            }
         }
-        for(auto ele:mp){
-            int val =ele.first;
-            int cnt = ele.second;
-            if(cnt==1) return val;
-        }
-        return -1;
-
+        return nums[n - 1];
     }
 };
