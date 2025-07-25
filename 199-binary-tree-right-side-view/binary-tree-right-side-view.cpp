@@ -19,19 +19,19 @@ public:
         }
         while(!q.empty()){
             int sizeOfQueue = q.size();
-            ans.push_back(q.front() -> val);
+            TreeNode* rightMost = nullptr;
             for(int i = 0; i < sizeOfQueue; i++){
-                TreeNode* temp = q.front();
-                q.pop();
+                TreeNode* temp = q.front(); q.pop();
+                rightMost = temp;
+                if(temp -> left != NULL){
+                    q.push(temp -> left);;
+                }
                 if(temp -> right != NULL){
                     q.push(temp -> right);
                 }
-                if(temp -> left != NULL){
-                    q.push(temp -> left);
-                }
             }
+            ans.push_back(rightMost -> val);
         }
         return ans;
-        
     }
 };
