@@ -10,11 +10,11 @@
  * };
  */
 class Solution {
-private:
-    vector<int> inOrderTraversal(TreeNode* root){
-        vector<int>ans;
-        stack<TreeNode*>st;
+public:
+    bool isValidBST(TreeNode* root) {
         TreeNode* temp = root;
+        TreeNode* prev = nullptr;
+        stack<TreeNode*> st;
         while(temp != NULL || !st.empty()){
             while(temp != NULL){
                 st.push(temp);
@@ -22,18 +22,11 @@ private:
             }
             temp = st.top();
             st.pop();
-            ans.push_back(temp -> val);
-            temp = temp -> right;
-        }
-        return ans;
-    }
-public:
-    bool isValidBST(TreeNode* root) {
-        vector<int> inOrderVec = inOrderTraversal(root);
-        for(int i = 1; i < inOrderVec.size(); i++){
-            if(inOrderVec[i - 1] > inOrderVec[i] || inOrderVec[i - 1] == inOrderVec[i]){
+            if(prev != nullptr && prev -> val >= temp -> val){
                 return false;
             }
+            prev = temp;
+            temp = temp -> right;
         }
         return true;
     }
