@@ -1,21 +1,20 @@
 class Solution {
 public:
     vector<int> findMissingAndRepeatedValues(vector<vector<int>>& grid) {
-        int n = grid.size();
-        vector<int> mp(n * n + 1,0);
-        int a, b;
-        for(int i = 0; i < grid.size(); i++){
-            for(int j = 0; j < grid.size(); j++){
-                mp[grid[i][j]]++;
-                if(mp[grid[i][j]]== 2) a = grid[i][j];
-            }
-        } 
-        for(int i = 1; i < n * n; i++){
-            if(mp[i] == 0) {
-                b = i;
-                break;
+        long long n = grid.size();
+        long long a, b, sum = 0 , sqrSum = 0;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                sum += grid[i][j];
+                sqrSum += grid[i][j] * grid[i][j];
             }
         }
-        return {a, b};
+        long long firstNSqr = (n * 1LL * n) * (n * n * 1LL * 2 + 1) * (n * n + 1) / 6;
+        long long a_b = sqrSum - firstNSqr;
+        long long res = (sum - ((n * n) * (n * n+ 1) / 2));
+        a_b = (a_b / res);
+        a = (a_b + res) / 2;
+        b = res - a;
+        return {(int)a,(int)-b};
     }
 };
