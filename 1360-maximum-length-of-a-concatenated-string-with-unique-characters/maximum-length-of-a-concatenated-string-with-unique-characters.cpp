@@ -1,29 +1,31 @@
 class Solution {
 private:
-    bool canBePart(unordered_set<char> tempString, string currString) {
-        int n = currString.size();
-        for(int i = 0; i < n; i++) {
-            if(tempString.find(currString[i]) != tempString.end()) return false;
-            tempString.insert(currString[i]);
+    bool canBePart(const unordered_set<char>& tempString, const string& currString) {
+        unordered_set<char> seen;
+        for(char c : currString) {
+            if(tempString.count(c) || seen.count(c)) return false;
+            seen.insert(c);
         }
         return true;
     }
+
     int solve(vector<string>& arr, unordered_set<char> tempString, int indx) {
         if(indx >= arr.size()) {
-            return tempString.size();
+            return tempString.size(); // ✅ base case: return current length
         }
-        //Not take
-        int maxi = 0;
-        maxi = max(solve(arr, tempString, indx + 1), maxi);
-        bool isTrue = canBePart(tempString,arr[indx]);
-        if(isTrue) {
-            for(int i = 0; i < arr[indx].size(); i++) {
-                tempString.insert(arr[indx][i]);
-            }
-            maxi = max(solve(arr,tempString, indx + 1), maxi);
+
+        // Option 1: Not take arr[indx]
+        int maxi = solve(arr, tempString, indx + 1);
+
+        // Option 2: Take arr[indx], only if possible
+        if(canBePart(tempString, arr[indx])) {
+            for(char c : arr[indx]) tempString.insert(c);
+            maxi = max(maxi, solve(arr, tempString, indx + 1));
         }
+
         return maxi;
     }
+
 public:
     int maxLength(vector<string>& arr) {
         unordered_set<char> temp;
