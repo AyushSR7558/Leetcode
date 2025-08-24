@@ -1,37 +1,23 @@
 class Solution {
+// Now we will do this with the help of the recursion and dp
+// This type of problem comes under the topic named kanpsack
+private:
+    int helper(vector<int>& satis, int time, int indx, vector<vector<int>>& dp) {
+        if(indx >= satis.size()) return 0;
+        if(dp[indx][time] != -1) return dp[indx][time];
+
+        //We can either take or we can either not make the dish
+        int take = -1e5, notTake = -1e5;
+        take = satis[indx] * time + helper(satis, time + 1, indx + 1, dp);
+        notTake = helper(satis, time, indx + 1, dp);
+        return dp[indx][time] = max(take,notTake);
+    }
 public:
     int maxSatisfaction(vector<int>& satisfaction) {
-        int p = satisfaction.size();
-        vector<int> positiveNo, negativeNo;
-        for(int i = 0; i < p; i++) {
-            if(satisfaction[i] < 0) {
-                negativeNo.push_back(satisfaction[i]);
-            }else {
-                positiveNo.push_back(satisfaction[i]);
-            }
-        }
-        sort(negativeNo.begin(), negativeNo.end());
-        sort(positiveNo.begin(), positiveNo.end());
-
-        int maxiSatisfaction = INT_MIN;
-        int m = negativeNo.size(), n = positiveNo.size();
-        for(int i = 0; i < m; i++) {
-            int coefficient = 1, satisfactionLevel = 0;
-            for(int j = i; j < m; j++) {
-                satisfactionLevel += coefficient * negativeNo[j];
-                coefficient++;
-            }
-            for(int j = 0; j < n; j++) {
-                satisfactionLevel += coefficient * positiveNo[j];
-                coefficient++;
-            }
-            maxiSatisfaction = max(maxiSatisfaction, satisfactionLevel);
-        }
-        int satisfactionLevel = 0;
-        for(int i = 0; i < n; i++) {
-            satisfactionLevel += positiveNo[i] * (i + 1);
-        }
-        maxiSatisfaction = max(maxiSatisfaction, satisfactionLevel);
-        return maxiSatisfaction;
+        sort(satisfaction.begin(),satisfaction.end());
+        int n = satisfaction.size();
+        vector<vector<int>>dp(n + 1, vector<int>(n + 2,-1));
+        int val = helper(satisfaction, 1, 0, dp);
+        return val < 0? 0: val;
     }
 };
