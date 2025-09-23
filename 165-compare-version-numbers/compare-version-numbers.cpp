@@ -21,7 +21,6 @@ public:
                     version2 = version2.substr(version2.find('.') + 1);
                 }
             }
-            cout << "temp1 = " << temp1 << " " << "temp2 = " << temp2;
             if(temp1 < temp2) return -1;
             if(temp1 > temp2) return 1;
         }
