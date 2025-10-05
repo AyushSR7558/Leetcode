@@ -1,34 +1,6 @@
 class Solution {
-public:
-    int m, n;
-    vector<vector<int>> directions = {{1,0}, {-1,0}, {0,1}, {0,-1}};
-
-    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
-        m = heights.size();
-        n = heights[0].size();
-
-        vector<vector<bool>> pacific(m, vector<bool>(n, false));
-        vector<vector<bool>> atlantic(m, vector<bool>(n, false));
-
-        for (int j = 0; j < n; j++) dfs(0, j, heights, pacific);
-        for (int i = 0; i < m; i++) dfs(i, 0, heights, pacific);
-
-        for (int j = 0; j < n; j++) dfs(m-1, j, heights, atlantic);
-        for (int i = 0; i < m; i++) dfs(i, n-1, heights, atlantic);
-
-        vector<vector<int>> result;
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (pacific[i][j] && atlantic[i][j]) {
-                    result.push_back({i, j});
-                }
-            }
-        }
-
-        return result;
-    }
-
-    void dfs(int i, int j, vector<vector<int>>& heights, vector<vector<bool>>& visited) {
+private:    
+        void dfs(int i, int j, vector<vector<int>>& heights, vector<vector<bool>>& visited) {
         visited[i][j] = true;
         
         for (auto& d : directions) {
@@ -41,4 +13,32 @@ public:
             dfs(x, y, heights, visited);
         }
     }
+public:
+    int m, n;
+    vector<vector<int>> directions = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
+        m = heights.size();
+        n = heights[0].size();
+
+        vector<vector<bool>> vPacific(m, vector<bool>(n, false));
+        vector<vector<bool>> vAtlantic(m, vector<bool>(n, false));
+
+        for(int i = 0; i < m; i++) dfs(i, 0, heights, vPacific);
+        for(int i = 0; i < n; i++) dfs(0, i, heights, vPacific);
+
+        for(int i = 0; i < m; i++) dfs(i, n - 1, heights, vAtlantic);
+        for(int i = 0; i < n; i++) dfs(m - 1, i, heights, vAtlantic);
+
+        vector<vector<int>> ans;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(vPacific[i][j] && vAtlantic[i][j]) {
+                    ans.push_back({i,j});
+                }
+            }
+        }
+        return ans;
+    }
+
 };
