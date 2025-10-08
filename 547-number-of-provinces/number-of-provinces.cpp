@@ -1,16 +1,22 @@
 class Solution {
 private:
-    void bfsTraversal(vector<vector<int>>& isConnected, vector<bool>& visited, int stNode){
-        queue<int> q;
-        int n = isConnected.size();
-        q.push(stNode);
-        while(!q.empty()){
-            int node = q.front();
-            q.pop();
-            for(int i = 0; i < n; i++){
-                if((isConnected[node][i] > 0) && (!visited[i])){
-                    visited[i] = true;
-                    q.push(i);
+    void bfs(vector<vector<int>>& isConnected, vector<bool>& visited, int node) {
+        int n = visited.size();
+        queue<int> qp;
+        
+        visited[node] = true;
+        for(int i = 0; i < n; i++) {
+            if(isConnected[node][i] && !visited[i]){
+                qp.push(i);
+            }
+        }
+        while(!qp.empty()) {
+            int subNode = qp.front();
+            qp.pop();
+            visited[subNode] = true;
+            for(int i = 0; i < n; i++) {
+                if(isConnected[subNode][i] && !visited[i]) {
+                    qp.push(i);
                 }
             }
         }
@@ -18,13 +24,15 @@ private:
 public:
     int findCircleNum(vector<vector<int>>& isConnected) {
         int n = isConnected.size();
-        vector<bool> isVisited(n,false);
-        int ans = 0;
-        for(int i = 0; i < n; i++){
-            if(isVisited[i]) continue;
-            ans++;
-            bfsTraversal(isConnected, isVisited, i);
+        int gPro  = 0;
+        vector<bool> visited(n, false);
+
+        for(int i = 0; i < n; i++) {
+            if(!visited[i]) {
+                gPro++;
+                bfs(isConnected, visited, i);
+            }
         }
-        return ans;
+        return gPro;
     }
 };
