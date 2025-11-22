@@ -18,7 +18,6 @@ public:
     int findKthPositive(vector<int>& arr, int k) {
         if(arr[0] > k) return k;
         int indx = BinarySearch(arr, k);
-        cout << indx;
 
         return arr[indx] + k - (arr[indx] - (indx + 1)) ;
     }
