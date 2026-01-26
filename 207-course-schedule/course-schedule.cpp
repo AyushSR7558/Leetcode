@@ -8,38 +8,36 @@ private:
         }
         return V;
     }
-
-    bool dfs(vector<vector<int>>& adjList,vector<bool>& visited, vector<bool>& prevVisited, int indx) {
-        visited[indx] = true;
-        prevVisited[indx] = true;
-
-        for(int edge : adjList[indx]) {
-            if(prevVisited[edge]) return true;
-            if(!visited[edge]) {
-                if(dfs(adjList, visited, prevVisited, edge)) return true;
-            }
-        }
-        prevVisited[indx] = false;
-        return false;
-    }
-    
 public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        // We have to find if there is cycle or not
         /*
-            * DFS :- Intution
-            * BFS :- Kahan's Algorithm
+            * BFS :- kahans algorithm
         */
-
         vector<vector<int>> list = adjList(prerequisites, numCourses);
-        vector<bool> visited(numCourses, false), prevVisited(numCourses, false);
+        vector<int> topoSort, indegree(numCourses);
+
         for(int i = 0; i < numCourses; i++) {
-            if(!visited[i]) {
-                if(dfs(list, visited, prevVisited, i)){
-                    return false;
-                }
+            for(int edge : list[i]) {
+                indegree[edge]++;
             }
         }
-        return true;
+
+        queue<int> q;
+        for(int i = 0; i < numCourses; i++) {
+            if(indegree[i] == 0) {
+                q.push(i);
+            }
+        }
+        while(!q.empty()) {
+            int indx = q.front();
+            q.pop();
+            for(int edge: list[indx]) {
+                indegree[edge]--;
+                if(indegree[edge] == 0) q.push(edge);
+            }
+            topoSort.push_back(indx);
+        }
+        return topoSort.size() == numCourses;
+
     }
 };
