@@ -9,25 +9,17 @@
  * };
  */
 class Solution {
-private:
-    bool isPresent(vector<int>& nums, int val) {
-        int n = nums.size();
-        for (int i = 0; i < n; i++) {
-            if (nums[i] == val)
-                return true;
-        }
-        return false;
-    }
 
 public:
     int numComponents(ListNode* head, vector<int>& nums) {
         int count = 0;
         ListNode* temp = head;
+        unordered_set<int> st(nums.begin(), nums.end());
 
         while (temp != nullptr) {
-            if (isPresent(nums, temp->val)) {
+            if (st.count(temp->val)) {
                 count++;
-                while (temp != nullptr && isPresent(nums, temp->val)) {
+                while (temp != nullptr && st.count(temp->val)) {
                     temp = temp -> next;
                 }
                 continue;
