@@ -12,7 +12,6 @@ public:
             int count = 0;
             count += prefix[n - 1] - prefix[i] - (n - i - 1) * nums[i];
             count += (i + 1) * nums[i] - prefix[i]; 
-            cout << count << endl;
             res.push_back(count);
         }
         return res;
