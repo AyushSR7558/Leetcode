@@ -1,25 +1,28 @@
 class Solution {
-public:
-    void generate(vector<string>& mp, string s, int n, int len) {
-        if(s.size() == 2 * n) {
-            mp.push_back(s);
+private:
+    void generate(vector<string>& a, string& b, int x, int y) {
+        if(x == 0 && y == 0) {
+            a.push_back(b);
             return;
         }
 
-        if(len != n) {
-            generate(mp, s + '(', n, len + 1);
+        if(x - 1 >= 0) {
+            b.push_back('(');
+            generate(a, b, x - 1, y);
+            b.pop_back();
         }
 
-        if(s.size() < 2 * len) {
-            generate(mp, s + ')', n, len);
+        if(y - 1 >= x) {
+            b.push_back(')');
+            generate(a, b, x, y - 1);
+            b.pop_back();
         }
     }
 public:
     vector<string> generateParenthesis(int n) {
-        vector<string> mp;
-        
-        generate(mp, "", n, 0);
-        return mp;
-        
+        vector<string> a;
+        string temp;
+        generate(a, temp, n, n);
+        return a;
     }
 };
