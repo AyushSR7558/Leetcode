@@ -17,20 +17,23 @@ public:
         }
 
         int cnt = 0;
+        unordered_set<int> st;
         for(int i = 0; i < n - 1; i++) {
-            if(num[i] >= n - 1 - i) continue;
             bool istrue = false;
-            for(int j = i + 1; j < n; j++) {
+            int temp = 0;
+            for(int j = 0; j < n; j++) {
+                if(st.count(j)) continue;
                 if(num[j] >= n - 1 - i) {
-                    cnt += j - i;
-                    for(int k = j - 1; k >= i; k--) {
-                        swap(num[k], num[k + 1]);
-                    }
+                    st.insert(j);
+                    cnt += temp;
                     istrue = true;
                     break;
                 }
+                temp++;
             }
-            if(!istrue) return -1;
+            if(!istrue) {
+                return -1;
+            }
         }
         
         return cnt;
