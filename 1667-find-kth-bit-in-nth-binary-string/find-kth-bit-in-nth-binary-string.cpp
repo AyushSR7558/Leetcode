@@ -13,7 +13,6 @@ public:
                 }
             }
             s = s + '1' + p;
-            cout << s << endl;
         }
         return s[k - 1];
     }
