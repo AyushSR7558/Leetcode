@@ -7,13 +7,13 @@ public:
         sort(cost.begin(), cost.end());
 
         for(int i = n - 1; i >= 0;) {
-            if(i >= 1) {
-                cnt += cost[i] + cost[i - 1];
-                i -= 3;
-            }else {
-                cnt  += cost[i];
-                i -= 1;
+            if(i == 0) {
+                cnt += cost[0];
+                break;
             }
+
+            cnt += cost[i] + cost[i - 1];
+            i -= 3;
         }
 
         return cnt;
