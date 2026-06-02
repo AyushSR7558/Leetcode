@@ -1,32 +1,26 @@
 class Solution {
 private:
-    int helper(vector<int>& landStartTime,
-                           vector<int>& landDuration,
-                           vector<int>& waterStartTime,
-                           vector<int>& waterDuration) {
-        int n = landStartTime.size(), m = waterStartTime.size();
-        int minTimeReq = INT_MAX;
+    int findEarliestFinish(vector<int>& firstStartTime,
+                           vector<int>& firstDuration,
+                           vector<int>& secondStartTime,
+                           vector<int>& secondDuration) {
+        int n = firstStartTime.size(), m = secondStartTime.size();
 
-        // If we take the land ride first
-        int minStartTime = INT_MAX, minEndTime = INT_MAX;
-
+        // Find the earliest time we can finish any first-type ride
+        int earliestFirstEnd = INT_MAX;
         for (int i = 0; i < n; i++) {
-            if (minEndTime >= landStartTime[i]) {
-                minEndTime = min(minEndTime, landStartTime[i] + landDuration[i]);
-            }
+            earliestFirstEnd = min(earliestFirstEnd,
+                                   firstStartTime[i] + firstDuration[i]);
         }
 
-        minTimeReq = INT_MAX;
-
+        // Now find the earliest finish for a second-type ride taken after
+        int result = INT_MAX;
         for (int i = 0; i < m; i++) {
-            if (waterStartTime[i] <= minEndTime) {
-                minTimeReq = min(minEndTime + waterDuration[i], minTimeReq);
-            } else {
-                minTimeReq =
-                    min(minTimeReq, waterStartTime[i] + waterDuration[i]);
-            }
+            int waitUntil = max(earliestFirstEnd, secondStartTime[i]);
+            result = min(result, waitUntil + secondDuration[i]);
         }
-        return minTimeReq;
+
+        return result;
     }
 
 public:
@@ -34,7 +28,11 @@ public:
                            vector<int>& landDuration,
                            vector<int>& waterStartTime,
                            vector<int>& waterDuration) {
-                            return min(helper(landStartTime, landDuration, waterStartTime, waterDuration), helper( waterStartTime, waterDuration,landStartTime, landDuration ) );
- 
+        return min(
+            findEarliestFinish(landStartTime,  landDuration,
+                               waterStartTime, waterDuration),
+            findEarliestFinish(waterStartTime, waterDuration,
+                               landStartTime,  landDuration)
+        );
     }
 };
