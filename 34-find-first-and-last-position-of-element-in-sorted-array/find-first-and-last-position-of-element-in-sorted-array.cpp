@@ -1,16 +1,50 @@
 class Solution {
+private:
+    int findFirstOccurance(vector<int>& nums, int target) {
+        int  n = nums.size();
+
+        int l = 0, r = n - 1, ans = -1;
+        while(l <= r) {
+            int mid = l + (r - l) / 2;
+
+            if(nums[mid] == target) {
+                ans = mid;
+                r = mid - 1;
+            }else if(nums[mid] < target) {
+                l = mid + 1;
+            }else {
+                r = mid - 1;
+            }
+        }
+
+        return ans;
+    }
+
+    int findLastOccurance(vector<int>& nums, int target) {
+        int n = nums.size();
+
+        int l = 0, r = n - 1, ans = -1;
+
+        while(l <= r) {
+            int mid = l + (r - l) / 2;
+
+            if(nums[mid] == target) {
+                ans = mid;
+                l = mid + 1;
+            }else if(nums[mid] < target) {
+                l = mid + 1;
+            }else {
+                r = mid - 1;
+            }
+        }
+
+        return ans;
+    }
 public:
     vector<int> searchRange(vector<int>& nums, int target) {
-        auto firstit = lower_bound(nums.begin(), nums.end(), target);
-        auto lastit = upper_bound(nums.begin(), nums.end(), target);
+        int firstOccurance = findFirstOccurance(nums, target), lastOccurance = findLastOccurance(nums, target);
 
-        if(((lastit == nums.begin())|| firstit == nums.end())) {
-            return {-1, -1};
-        }
-        if(*firstit != target) {
-            return {-1, -1};
-        }
+        return {firstOccurance, lastOccurance};
 
-        return {(int)(firstit - nums.begin()),(int) (lastit - nums.begin() - 1)};
     }
 };
