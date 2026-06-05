@@ -1,26 +1,37 @@
 class Solution {
-public:
-    int totalWaviness(int num1, int num2) {
-        auto getWaviness = [](int x) -> int {
-            string s = to_string(x);
-            int waviness = 0;
+private:
+    int calWavinessOfNumber(int num) {
+        int cnt = 0;
+        int prev = num % 10;
+        num /= 10;
+        int curr = num % 10;
+        num /= 10;
 
-            for (size_t i = 1; i < s.size() - 1; ++i) {
-                bool isPeak = s[i] > s[i - 1] && s[i] > s[i + 1];
-                bool isValley = s[i] < s[i - 1] && s[i] < s[i + 1];
-                if (isPeak || isValley) {
-                    ++waviness;
-                }
-            }
+        while(num) {
+            int next = num % 10;
+            num /= 10;
 
-            return waviness;
-        };
+            if(next > curr && curr < prev) cnt++;
+            if(next < curr && curr > prev) cnt++;
 
-        int total = 0;
-        for (int i = num1; i <= num2; ++i) {
-            total += getWaviness(i);
+            prev = curr;
+            curr = next;
         }
 
-        return total;
+        return cnt;
+    }
+public:
+    int totalWaviness(int num1, int num2) {
+        int cnt = 0; // Count the waviness of all the number
+
+        if(num2 <= 100) {
+            return 0;
+        }
+
+        for(int i = max(num1, 100); i <= num2; i++) {
+            cnt += calWavinessOfNumber(i);
+        }
+
+        return cnt;
     }
 };
